@@ -83,32 +83,6 @@ def states_to_wordclouds(hmm, obs_map, max_words=50, show=True):
 # HMM FUNCTIONS
 ####################
 
-def parse_observations(text):
-    # Convert text to dataset.
-    lines = [line.split() for line in text.split('\n') if line.split()]
-
-    obs_counter = 0
-    obs = []
-    obs_map = {}
-
-    for line in lines:
-        obs_elem = []
-        
-        for word in line:
-            word = re.sub(r'[^\w]', '', word).lower()
-            if word not in obs_map:
-                # Add unique words to the observations map.
-                obs_map[word] = obs_counter
-                obs_counter += 1
-            
-            # Add the encoded word.
-            obs_elem.append(obs_map[word])
-        
-        # Add the encoded sequence.
-        obs.append(obs_elem)
-
-    return obs, obs_map
-
 def obs_map_reverser(obs_map):
     obs_map_r = {}
 
@@ -127,6 +101,28 @@ def sample_sentence(hmm, obs_map, n_words=100):
 
     return ' '.join(sentence).capitalize() + '...'
 
+
+def parse_observations(text):
+    obs_counter = 0
+    obs = []
+    obs_map = {}
+    for line in text:
+        obs_elem = []
+        
+        for word in line:
+            word = re.sub(r'[^\w]', '', word).lower()
+            if word not in obs_map:
+                # Add unique words to the observations map.
+                obs_map[word] = obs_counter
+                obs_counter += 1
+            
+            # Add the encoded word.
+            obs_elem.append(obs_map[word])
+        
+        # Add the encoded sequence.
+        obs.append(obs_elem)
+
+    return obs, obs_map
 
 ####################
 # HMM VISUALIZATION FUNCTIONS
